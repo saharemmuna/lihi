@@ -263,7 +263,7 @@ if __name__ == "__main__":
        Group: Avishag Tamssut id-326275609
                Merav Hashta id-214718405
                Sahar Emmuna id-213431133
-       Git: https://github.com/saharemmuna/Quiz2S.git
+       Git: https://github.com/saharemmuna/test2se.git
        Name: Sahar Emmuna id-213431133
        """
 
