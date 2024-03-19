@@ -2,6 +2,9 @@ from numpy.linalg import norm
 from matrix_utility import row_addition_elementary_matrix, scalar_multiplication_elementary_matrix, is_diagonally_dominant
 import numpy as np
 from colors import bcolors
+from gaussian_elimination import gaussianElimination, forward_substitution, backward_substitution
+
+
 
 
 def norma(mat):
@@ -14,6 +17,10 @@ def norma(mat):
         if sum_row > max_row:
             max_row = sum_row
     return max_row
+
+
+
+
 
 
 def gauss_seidel(A, b, X0, TOL=1e-16, N=200):
@@ -45,6 +52,7 @@ def gauss_seidel(A, b, X0, TOL=1e-16, N=200):
 
     print("Maximum number of iterations exceeded")
     return tuple(x)
+
 
 def find_u(A):
     n = A.shape[0]
@@ -140,7 +148,6 @@ def MulMatrixVector(InversedMat, b_vector):
 
 
 
-
 def inverse(matrix):
     #print(bcolors.OKBLUE, f"=================== Finding the inverse of a non-singular matrix using elementary row operations ===================\n {matrix}\n", bcolors.ENDC)
     if matrix.shape[0] != matrix.shape[1]:
@@ -202,6 +209,7 @@ def sum_vectors(a, b):
 def gauss_GH(A):
     L = find_l(A)
     U = find_u(A)
+    print(U)
     D = find_d(A)
     L_D = add_matrices(L, D)
     L_D_inverse = inverse(L_D)
@@ -212,6 +220,9 @@ def gauss_GH(A):
 
     print("H: ")
     print(L_D_inverse)
+
+
+
 
 
 
@@ -232,7 +243,8 @@ def gauss_Ait(A, Xr, b):
     #print("gauss")
     #print(Xr_result)
 
-def G_norm(matrix):
+
+def G_norm(A):
     L = find_l(A)
     U = find_u(A)
     D = find_d(A)
@@ -243,46 +255,37 @@ def G_norm(matrix):
     #print("G matrix for Gauss_seidel: \n" + str(G))
     G_norm = norma(G)
     print("G_norm = " + str(G_norm))
-    if(G_norm < 1):
-        return True
-    return False
+    if(G_norm > 1):
+        return False
+    return True
+
 
 if __name__ == '__main__':
 
-    A = np.array([[3, -1, 1], [0, 1, -1], [1, 1, -2]])
-    b = np.array([4, -1, -3])
+    A = np.array([[2, 3, 4, 5, 6], [-5, 3, 4, -2, 3], [4, -5, -2, 2, 6], [4, 5, -1, -2, -3], [5, 5, 3, -3, 5]])
+    b = np.array([70, 20, 26, -12, 37])
     X0 = np.zeros_like(b)
 
-    solution =gauss_seidel(A, b, X0)
-    print(bcolors.OKBLUE,"\nApproximate solution:", solution, bcolors.ENDC)
+    A_b = [[2, 3, 4, 5, 6, 70],
+           [-5, 3, 4, -2, 3, 20],
+           [4, -5, -2, 2, 6, 26],
+           [4, 5, -1, -2, -3, -12],
+           [5, 5, 3, -3, 5, 37]]
+    """"
+         Date: 18/3/24
+         Group: Avishag Tamssut id-326275609
+                 Merav Hashta id-214718405
+                 Sahar Emmuna id-213431133
+         Git: https://github.com/saharemmuna/test2se.git
+         Name: Sahar Emmuna id-213431133
+         """
+
+    if(G_norm(A)==0):
+        result = gaussianElimination(A_b)
+        print(bcolors.OKBLUE, "The norm is large 1 (the gauss seidel method will not work) the solution using the gaussian Elimination method: ", result, bcolors.ENDC)
+    else:
+        solution = gauss_seidel(A, b, X0)
+        print(bcolors.OKBLUE,"\nApproximate solution:", solution, bcolors.ENDC)
+
     #--------------------------us------------------------- iterative
-    A = np.array([[5, 1, 2],
-                  [1, 6, 4],
-                  [0, 3, 8]])
-    b = np.array([[1],
-                  [2],
-                  [3]])
-    Xr = np.array([[0],
-                   [0],
-                   [0]])
-
-    gauss_GH(A)
-
-if is_diagonally_dominant(A):
-    while True:
-        Xr_plus_1 = np.array(gauss_Ait(A, Xr, b))
-        if not np.any(np.abs(Xr - Xr_plus_1) > 0.001):
-            # print(Xr_plus_1)
-            break
-        Xr = Xr_plus_1.copy()
-else:
-    print("The diagonal in the matrix is not dominant and therefore the iterative methods will not converge")
-
-print(bcolors.OKBLUE, "guess sidel solution:\n", bcolors.ENDC + str(Xr) + "\n")
-
-
-if(G_norm(A)):
-     print("condition for convergence is met ")
-else:
-    print("No convergence condition is met")
 

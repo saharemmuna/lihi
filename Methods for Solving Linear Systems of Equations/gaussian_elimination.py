@@ -2,6 +2,21 @@ import numpy as np
 from colors import bcolors
 from matrix_utility import swap_row
 
+def create_diagonal_matrix(values):
+    """
+    יוצרת מטריצה מדורגת באלכסון עם הערכים שנמצאים ברשימה values על האלכסון הראשי.
+
+    :param values: רשימה של הערכים שיש להניח על האלכסון הראשי.
+    :return: מטריצה מדורגת.
+    """
+    n = len(values)
+    # יצירת מטריצה ריקה בגודל n על n
+    matrix = np.zeros((n, n))
+    # הוספת הערכים לאלכסון הראשי של המטריצה
+    for i in range(n):
+        matrix[i, i] = values[i]
+    return matrix
+
 
 def gaussianElimination(mat):
     N = len(mat)
@@ -17,7 +32,6 @@ def gaussianElimination(mat):
 
     # if matrix is non-singular: get solution to system using backward substitution
     return backward_substitution(mat)
-
 
 
 
@@ -78,11 +92,19 @@ def backward_substitution(mat):
 
 
 if __name__ == '__main__':
-
-    A_b = [[1, -1, 2, -1, -8],
-        [2, -2, 3, -3, -20],
-        [1, 1, 1, 0, -2],
-        [1, -1, 4, 3, 4]]
+    """"
+           Date: 18/3/24
+           Group: Avishag Tamssut id-326275609
+                   Merav Hashta id-214718405
+                   Sahar Emmuna id-213431133
+           Git: https://github.com/Avishagtams/Numerical-Analysis-Quiz2.git
+           Name: Avishag Tamssut 326275609
+           """
+    A_b = [[2, 3, 4, 5, 6, 70],
+        [-5, 3, 4, -2, 3, 20],
+        [4, -5, -2, 2, 6, 26],
+        [4, 5, -1, -2, -3, -12],
+        [5, 5, 3, -3, 5, 37]]
 
     result = gaussianElimination(A_b)
     if isinstance(result, str):
